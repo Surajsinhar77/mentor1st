@@ -1,3 +1,5 @@
+// CURD OPERATION ON MONGO DATABASE UISNG EXPRESS RESTFull API FROM line no 67
+
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -97,38 +99,16 @@ app.post('/app/get/insert', async(req, res)=>{
     }
 })
 
-// ** First 3 . To Update Data from the Database --------------------------------------------- 2 -----
-// app.put('/app/get/update', async(req, res)=>{
-//     try{
-//         const {email, name} = req.body;
-//         const userExist = await CurdModel.findOne({email:email});
-//         if(!userExist){
-//             return res.json({message: "User Does't exist"});
-//         }
-//         const updateData = await CurdModel.updateOne(
-//             {email: email},
-//             {
-//                 $set: {name:name}
-//             }
-//         );
-//         return res.json({Message:updateData});
-//     }catch(err){
-//         return console.error(err);
-//     }
-// })
 
 
 // ** First 4 . To Update Data using Id from the Database --------------------------------------------- 2 -----
 app.put('/app/get/update/:_id', async(req, res)=>{
     try{
         const id = req.params._id;
-        console.log(id)
         const pId = new mongoose.Types.ObjectId(id);
-        console.log(pId);
         const userExist = await CurdModel.findById(pId);
-        const {name , email} = req.body;
 
-        console.log("I am here ", id);
+        const {name , email} = req.body;
         if(!userExist){
             return res.json({message: "User Does't exist"});
         }
@@ -147,9 +127,11 @@ app.put('/app/get/update/:_id', async(req, res)=>{
 // ** First 5 . To Delete Data using Id from the Database --------------------------------------------- 2 -----
 app.delete('/app/get/delete/:_id', async(req, res)=>{
     try{
-        const { _id} = req.params;
-        const id =  new mongoose.Types.ObjectId(_id);
-        const userExist = await CurdModel.findById(id);
+        const id = req.params._id;
+        console.log("i am in delete function ", id)
+        const mainId =  new mongoose.Types.ObjectId(id);
+        console.log(mainId);
+        const userExist = await CurdModel.findById(mainId);
         if(!userExist){
             return res.json({message:"User Does't exist"});
         }
