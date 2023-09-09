@@ -16,32 +16,31 @@ const databaseConnectivity =()=>{
 databaseConnectivity();
 
 // Creating Schema for the model of the database 
-const gettingModel =()=>{
+const gettingModel = () =>{
     // let suppose name, email , phoneno, gender, course ;
     const CurdSchema = mongoose.Schema({    
         name:{
-            String,
+            type:String,
             required : true,
         },
 
         email:{
-            String,
-            unique,
+            type:String,
+            unique:true,
             required : true,
             lowercase:true,
         },
 
-        phone:{
-            Number,
-            unique,
-            required:true,
+        phoneno:{
+            type:String,
+            unique: true,
+            required : true,
             lowercase:true,
         },
 
         course:{
-            String,
-            unique,
-            required:true,
+            type:String,
+            required : true,
             lowercase:true,
         }
     })
@@ -64,7 +63,7 @@ app.get('/', (req, res)=>{
 
 
 // ** First 1 . To Get Data from the Database ------------------------------------------------ 1 API Start-----
-app.get('app/get/alldata', async(req, res)=>{
+app.get('/app/get/alldata', async(req, res)=>{
     try{
         const userData = await CurdModel.find({});
         res.status(201).json({User:userData});
@@ -74,9 +73,10 @@ app.get('app/get/alldata', async(req, res)=>{
 })
 
 // ** First 2 . To Insert Data from the Database --------------------------------------------- 2 -----
-app.post('app/get/insert', async(req, res)=>{
+app.post('/app/get/insert', async(req, res)=>{
+    console.log("mai aaya ");
     try{
-        const {name, email, phoneno, gender, course} = req.body();
+        const {name, email, phoneno, gender, course} = req.body;
         const userExist = await CurdModel.findOne({email:email});
         if(userExist){
             res.json({message:"User Already Exsit ", userExist: true});
@@ -98,31 +98,37 @@ app.post('app/get/insert', async(req, res)=>{
 })
 
 // ** First 3 . To Update Data from the Database --------------------------------------------- 2 -----
-app.put('/app/get/update', async(req, res)=>{
-    try{
-        const userExist = await CurdModel.findOne({email:email});
-        if(!userExist){
-            return res.json({message: "User Does't exist"});
-        }
-        const {email, changeData} = req.body; 
-        const updateData = await CurdModel.updateOne(
-            {email: email},
-            {
-                $set: {name:changeData}
-            }
-        );
-        return res.json({Message:updateData});
-    }catch(err){
-        return console.error(err);
-    }
-})
+// app.put('/app/get/update', async(req, res)=>{
+//     try{
+//         const {email, name} = req.body;
+//         const userExist = await CurdModel.findOne({email:email});
+//         if(!userExist){
+//             return res.json({message: "User Does't exist"});
+//         }
+//         const updateData = await CurdModel.updateOne(
+//             {email: email},
+//             {
+//                 $set: {name:name}
+//             }
+//         );
+//         return res.json({Message:updateData});
+//     }catch(err){
+//         return console.error(err);
+//     }
+// })
+
 
 // ** First 4 . To Update Data using Id from the Database --------------------------------------------- 2 -----
-app.put('/app/get/update:_id', async(req, res)=>{
+app.put('/app/get/update/:_id', async(req, res)=>{
     try{
-        const id = req.params;
+        const id = req.params._id;
+        console.log(id)
         const pId = new mongoose.Types.ObjectId(id);
+        console.log(pId);
         const userExist = await CurdModel.findById(pId);
+        const {name , email} = req.body;
+
+        console.log("I am here ", id);
         if(!userExist){
             return res.json({message: "User Does't exist"});
         }
@@ -139,15 +145,15 @@ app.put('/app/get/update:_id', async(req, res)=>{
 })
 
 // ** First 5 . To Delete Data using Id from the Database --------------------------------------------- 2 -----
-app.delete('/app/get/delete:_id', async(req, res)=>{
+app.delete('/app/get/delete/:_id', async(req, res)=>{
     try{
-        const {id} = req.params;
-        const {email, changeData} = req.body;
-        const userExist = await CurdModel.deleteOne(id);
+        const { _id} = req.params;
+        const id =  new mongoose.Types.ObjectId(_id);
+        const userExist = await CurdModel.findById(id);
         if(!userExist){
-            return res.json({message:"User Does't exist"})
+            return res.json({message:"User Does't exist"});
         }
-        const updateData = await CurdModel.DeleteOne({email:email});
+        const updateData = await CurdModel.deleteOne({_id:id});
         return res.json({Message:updateData});
     }catch(err){
         console.error(err);
@@ -155,7 +161,7 @@ app.delete('/app/get/delete:_id', async(req, res)=>{
 })
 
 app.listen(6000, ()=>{
-    console.log("The localhost is runon the port no : https://localhost/",6000);
+    console.log("The localhost is runon the port no : http://localhost:"+6000);
 })
 
 // require(path.join(__dirname, "./routes/user.router"))(app);
