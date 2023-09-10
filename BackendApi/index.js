@@ -146,5 +146,3 @@ app.delete('/app/get/delete/:_id', async(req, res)=>{
 app.listen(6000, ()=>{
     console.log("The localhost is runon the port no : http://localhost:"+6000);
 })
-
-// require(path.join(__dirname, "./routes/user.router"))(app);
