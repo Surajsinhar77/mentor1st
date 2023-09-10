@@ -48,7 +48,7 @@ const gettingModel = () =>{
         }
     })
 
-    const CurdModel = mongoose.model('Users', CurdSchema);
+    const CurdModel = mongoose.model('Students', CurdSchema);
     return CurdModel;
 }
 
