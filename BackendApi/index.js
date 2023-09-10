@@ -32,11 +32,7 @@ const gettingModel = () =>{
             required : true,
             lowercase:true,
         },
-        gender:{
-            type:String,
-            required : true,
-            lowercase:true,
-        },
+        
 
         phoneno:{
             type:String,
@@ -57,6 +53,7 @@ const gettingModel = () =>{
 }
 
 const CurdModel = gettingModel();
+
 
 
 // This is test Api and there Port Address info
@@ -82,16 +79,16 @@ app.get('/app/get/alldata', async(req, res)=>{
 // ** First 2 . To Insert Data from the Database --------------------------------------------- 2 -----
 app.post('/app/get/insert', async(req, res)=>{
     try{
-        const {name, email, phoneno, gender, course} = req.body;
+        const {name, email, phoneno, course} = req.body;
         const userExist = await CurdModel.findOne({email:email});
         if(userExist){
-            res.json({message:"User Already Exsit ", userExist: true});
+            res.setHeader('Custom-Header', 'HelloWorld');
+            return res.json({message:"User Already Exsit ", userExist: true});
         }
         const userData = new CurdModel({
             name:name,
             email:email,
             phoneno:phoneno,
-            gender:gender,
             course:course,
         });
 
