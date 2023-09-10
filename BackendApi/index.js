@@ -8,7 +8,7 @@ app.use(express.json());
 
 //Database Connectivity 
 const databaseConnectivity =()=>{
-    mongoose.connect('mongodb://localhost:27017/CURD').then(()=>{
+    mongoose.connect('mongodb://127.0.0.1:27017/CURD').then(()=>{
         console.log("Database is sucessfull connected ");
     }).catch((err)=>{
         console.log("This is the error while connected to Database : ",err);
@@ -29,6 +29,11 @@ const gettingModel = () =>{
         email:{
             type:String,
             unique:true,
+            required : true,
+            lowercase:true,
+        },
+        gender:{
+            type:String,
             required : true,
             lowercase:true,
         },
@@ -76,7 +81,6 @@ app.get('/app/get/alldata', async(req, res)=>{
 
 // ** First 2 . To Insert Data from the Database --------------------------------------------- 2 -----
 app.post('/app/get/insert', async(req, res)=>{
-    console.log("mai aaya ");
     try{
         const {name, email, phoneno, gender, course} = req.body;
         const userExist = await CurdModel.findOne({email:email});
